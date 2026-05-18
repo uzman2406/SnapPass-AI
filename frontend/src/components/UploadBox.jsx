@@ -14,6 +14,11 @@ function UploadBox({ onFileSelect }) {
   const [error, setError] = useState('');
 
   const handleFile = (file) => {
+    if (!file) {
+      setError('Please select an image file.');
+      return;
+    }
+
     const result = validateImageFile(file);
     if (!result.valid) {
       setError(result.error);
