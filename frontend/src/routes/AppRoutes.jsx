@@ -1,8 +1,7 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import DelayedFallback from '../components/DelayedFallback';
 import RouteErrorBoundary from '../components/RouteErrorBoundary';
-
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const UploadPage = lazy(() => import('../pages/UploadPage'));
@@ -11,13 +10,16 @@ const PrintPreviewPage = lazy(() => import('../pages/PrintPreviewPage'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard'));
 const TermsPage = lazy(() => import('../pages/TermsPage'));
 const PrivacyPage = lazy(() => import('../pages/PrivacyPage'));
+
 /**
  * AppRoutes — central route configuration for SnapPass AI.
  * Add new pages here so contributors can find all routes in one place.
  */
 function AppRoutes() {
+  const location = useLocation();
+
   return (
-    <RouteErrorBoundary>
+    <RouteErrorBoundary key={location.pathname}>
       <Suspense fallback={<DelayedFallback delayMs={250} />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
