@@ -101,7 +101,7 @@ CLOUDINARY_API_SECRET=
 ---
 
 ##  Folder Structure
-
+'''
 backend/
 ├── docs/
 │   ├── authentication.md
@@ -177,6 +177,7 @@ backend/
 ├── package-lock.json
 ├── server.js
 └── vercel.json
+'''
 
 ## API Endpoints
 
