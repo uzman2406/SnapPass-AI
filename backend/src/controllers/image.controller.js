@@ -29,7 +29,8 @@ export const processImage = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "filename is required." });
     }
 
-    const filePath = path.join(__dirname, "..", "..", "uploads", filename);
+    const safeName = path.basename(filename);
+    const filePath = path.join(__dirname, "..", "..", "uploads", safeName);
 
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ success: false, message: "File not found on server." });
