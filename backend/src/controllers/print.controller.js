@@ -17,10 +17,6 @@ export const generateSheet = async (req, res, next) => {
   try {
     const { filename, quantity = 6, photoSizePreset = "35x45" } = req.body;
 
-    if (!filename) {
-      return res.status(400).json({ success: false, message: "filename is required." });
-    }
-
     const aiResponse = await axios.post(
       `${config.aiServiceUrl}/generate-sheet`,
       { filename, quantity, photo_size_preset: photoSizePreset },
