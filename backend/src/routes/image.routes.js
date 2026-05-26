@@ -11,7 +11,7 @@ import { processImageValidation } from "../validation/image.validation.js";
 
 const router = express.Router();
 
-router.post("/", processImageValidation, validate,processImage);
+router.post("/", processImageValidation, validate, processImage);
 router.get("/preview/:filename", getPreview);
 
 export default router;
