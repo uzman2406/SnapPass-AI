@@ -25,10 +25,6 @@ export const processImage = async (req, res, next) => {
   try {
     const { filename, backgroundColour = "white", photoSizePreset = "35x45" } = req.body;
 
-    if (!filename) {
-      return res.status(400).json({ success: false, message: "filename is required." });
-    }
-
     const filePath = path.join(__dirname, "..", "..", "uploads", filename);
 
     if (!fs.existsSync(filePath)) {
