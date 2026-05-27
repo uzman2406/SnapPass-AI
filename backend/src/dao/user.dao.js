@@ -25,6 +25,7 @@ export async function updateUserPassword(id, newPassword) {
     const user = await User.findById(id).select("+password");
     if (!user) return null;
     user.password = newPassword;
+    // user.save() triggers Mongoose pre("save") hooks which automatically hashes the password
     await user.save();
     return user;
 }
