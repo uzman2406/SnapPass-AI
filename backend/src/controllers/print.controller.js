@@ -7,7 +7,7 @@
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import { config } from "../config/config.js";
 import { PHOTO_SIZE_DETAILS } from "../utils/photoPresets.js";
 
@@ -49,21 +49,25 @@ export const generateSheet = async (req, res, next) => {
     const uploadsDir = path.resolve(__dirname, "..", "..", "uploads");
     const filePath = path.resolve(uploadsDir, filename);
 
-    if (!filePath.startsWith(uploadsDir + path.sep)) {
+    const relative = path.relative(uploadsDir, filePath);
+    if (relative.startsWith("..") || path.isAbsolute(relative)) {
       return res.status(403).json({ success: false, message: "Access denied: Path traversal detected." });
     }
 
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ success: false, message: "File not found on server." });
-    }
-
-    // 5. Symlink protection & regular file enforcement
-    const stats = fs.lstatSync(filePath);
-    if (stats.isSymbolicLink()) {
-      return res.status(403).json({ success: false, message: "Access denied: Symbolic links are blocked." });
-    }
-    if (!stats.isFile()) {
-      return res.status(400).json({ success: false, message: "Access denied: Target is not a file." });
+    // 5. Async existence, symlink protection & regular file enforcement (non-blocking TOCTOU prevention)
+    try {
+      const stats = await fs.promises.lstat(filePath);
+      if (stats.isSymbolicLink()) {
+        return res.status(403).json({ success: false, message: "Access denied: Symbolic links are blocked." });
+      }
+      if (!stats.isFile()) {
+        return res.status(400).json({ success: false, message: "Access denied: Target is not a file." });
+      }
+    } catch (err) {
+      if (err.code === "ENOENT") {
+        return res.status(404).json({ success: false, message: "File not found on server." });
+      }
+      throw err;
     }
 
     // 6. Quantity boundary check (1 to 50)
