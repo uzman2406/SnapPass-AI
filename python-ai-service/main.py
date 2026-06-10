@@ -62,7 +62,8 @@ def _safe_photo_path(raw: str) -> str:
     try:
         resolved.relative_to(allowed_dir)
     except ValueError:
-        raise ValueError("Invalid photo_path: file is outside the allowed upload directory.")
+        raise ValueError(
+            "Invalid photo_path: file is outside the allowed upload directory.")
     return str(resolved)
 
 
@@ -116,7 +117,12 @@ def generate_sheet():
     raw_photo_path = data.get("photo_path")
     # Sanitize preset_id to alphanumeric + dash/underscore only so it cannot
     # inject path separators into the output filename (e.g. '../evil').
-    preset_id = re.sub(r"[^a-zA-Z0-9_\-]", "", data.get("preset_id", "35x45")) or "35x45"
+    preset_id = re.sub(
+        r"[^a-zA-Z0-9_\-]",
+        "",
+        data.get(
+            "preset_id",
+            "35x45")) or "35x45"
     quantity = int(data.get("quantity", 8))
     bg_color = tuple(data.get("bg_color", [255, 255, 255]))
     draw_guides = bool(data.get("draw_guides", True))
@@ -133,7 +139,9 @@ def generate_sheet():
     os.makedirs(output_dir, exist_ok=True)
     # Include a UUID in the filename so concurrent requests using the same
     # preset_id do not race on the same file path.
-    output_path = os.path.join(output_dir, f"sheet_{preset_id}_{uuid.uuid4().hex}.jpg")
+    output_path = os.path.join(
+        output_dir, f"sheet_{preset_id}_{
+            uuid.uuid4().hex}.jpg")
 
     saved = generate_a4_sheet(
         photo_path=photo_path,
