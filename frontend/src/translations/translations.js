@@ -165,6 +165,14 @@ export const translations = {
 
     saturation: 'Saturation',
 
+    warmth: 'Warmth',
+
+    sharpness: 'Sharpness',
+
+    shadows: 'Shadows',
+
+    highlights: 'Highlights',
+
     reset: 'Reset',
 
     download: 'Download',
@@ -534,6 +542,14 @@ export const translations = {
     contrast: 'कॉन्ट्रास्ट',
 
     saturation: 'सैचुरेशन',
+
+    warmth: 'वार्म्थ',
+
+    sharpness: 'शार्पनेस',
+
+    shadows: 'शैडो',
+
+    highlights: 'हाइलाइट्स',
 
     reset: 'रीसेट',
 
